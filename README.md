@@ -16,15 +16,15 @@ This is an experimental project built for practicing React development, modern H
 
 1. Clone the repository:
 
+```bash
 git clone https://github.com/stefanganchev/Travel-list.git
+```
 
 2. Navigate to the project directory:
 
+```bash
 cd Travel-list
-
-## Available Scripts
-
-In the project directory, you can run:
+```
 
 3. Install dependencies:
 
