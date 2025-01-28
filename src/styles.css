@@ -15,6 +15,7 @@
   --button-text-weight: 600;
   --card-title-text-weight: 600;
   --card-title-completed-text-weight: 400;
+  --text-bold: 600;
 }
 
 body {
@@ -156,9 +157,20 @@ body {
 
 .select-field {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   height: 40px;
   background: white;
   border-radius: var(--corner-radius);
+}
+
+.custom-select-value {
+  font-weight: var(--text-bold);
+}
+
+.sort-label {
+  font-size: inherit;
 }
 
 .custom-select {
