@@ -3,6 +3,7 @@ import Select from "react-select";
 import Navbar from "./components/Navbar";
 import AddItem from "./components/AddItem";
 import ListItem from "./components/ListItem";
+import ClearButton from "./components/ClearButton";
 import LocationInfo from "./components/LocationInfo";
 import Map from "./components/Map";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -152,9 +153,7 @@ export default function App() {
                     }),
                   }}
                 />
-                <button className="clear-button" onClick={handleClearList}>
-                  Clear List <img src="images/X-small.svg" alt="Clear List" />
-                </button>
+                <ClearButton handleClear={handleClearList} />
               </>
             )}
           </div>

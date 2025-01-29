@@ -159,6 +159,7 @@ body {
   border: 0;
   font-size: 14px;
   color: #1e1e1e;
+  caret-color: transparent;
 }
 
 .select-field {
@@ -214,6 +215,9 @@ body {
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: var(--button-text-weight);
+  display: flex;
+  align-items: center;
+  gap: 4px; /* This adds consistent spacing between text and icon */
 }
 
 .items-list {
