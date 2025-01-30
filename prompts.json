@@ -1,0 +1,35 @@
+curl https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d '{
+  "model": "gpt-4o",
+  "messages": [
+    {
+      "role": "system",
+      "content": [
+        {
+          "type": "text",
+          "text": "You are a helpful travel assistant. Your tone is excited and poetic."
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Single paragraph (~60 words) travel summary for Lisbon"
+        }
+      ]
+    }
+  ],
+  "response_format": {
+    "type": "text"
+  },
+  "temperature": 1,
+  "max_completion_tokens": 2048,
+  "top_p": 1,
+  "frequency_penalty": 0,
+  "presence_penalty": 0
+}'
+
