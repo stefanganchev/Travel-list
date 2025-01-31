@@ -16,8 +16,7 @@ export default function Map({ center, zoom }) {
     customMarker.className = "marker";
     customMarker.style.backgroundImage = "url('images/Map-pin.svg')";
 
-    new mapboxgl.Marker(customMarker).setLngLat([-9.1393, 38.7223]).addTo(map);
-
+    new mapboxgl.Marker(customMarker).setLngLat(center).addTo(map);
     return () => map.remove();
   }, [center, zoom]);
 

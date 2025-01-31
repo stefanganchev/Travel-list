@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
 import Navbar from "./components/Navbar";
 import AddItem from "./components/AddItem";
@@ -7,12 +7,17 @@ import ClearButton from "./components/ClearButton";
 import LocationInfo from "./components/LocationInfo";
 import Map from "./components/Map";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { callOpenAI } from "./services/openAiService";
+import { getCoordinates } from "./services/mapboxService";
 
 export default function App() {
+  const mounted = useRef(false);
+
   // location and map data
-  const location = "Lisbon";
-  const mapCenter = [-9.1393, 38.7223];
+  const location = "Dallas";
+  const [mapCenter, setMapCenter] = useState([-122.4194, 37.7749]); // San Francisco coordinates
   const mapZoom = 12;
+  const [items, setItem] = useState([]);
 
   // sorting options
   const sortingOptions = [
@@ -23,36 +28,62 @@ export default function App() {
     { value: "all", label: "All" },
   ];
 
-  // initial default items
-  const initialItems = [
-    {
-      id: 1,
-      title: "Passport",
-      subtitle: "You're travelling internationally. Passport is a requirement.",
-      completed: false,
-      timestamp: "2025-01-27T13:45:00.000Z",
-    },
-    {
-      id: 2,
-      title: "Boarding pass",
-      subtitle: "That boarding pass is your ticket to the adventure!",
-      completed: false,
-      timestamp: "2025-01-27T13:35:00.000Z",
-    },
-    {
-      id: 3,
-      title: "Water bottle",
-      subtitle: "Remember to stay hydrated!",
-      completed: false,
-      timestamp: "2025-01-27T13:25:00.000Z",
-    },
-  ];
+  // Loading states
+  const [isItemsLoading, setIsItemsLoading] = useState(true);
 
-  const [items, setItem] = useState(initialItems);
+  // Get the suggested items from OpenAI
+  const getSuggestedItems = async () => {
+    try {
+      const response = await callOpenAI(
+        `List the top 3 travel items an American needs for a trip to ${location}. Be specific but brief. For each item, provide a short (8-10 words) description. Don't number the items and use this format: "Item title : Item description"`
+      );
+      const itemsFromResponse = response
+        .split("\n")
+        .filter((item) => item.trim().length > 0)
+        .map((item) => item.trim());
+
+      setItem((prevItems) => [
+        ...prevItems,
+        ...itemsFromResponse.map((item) => {
+          const [title, description] = item.split(":");
+          return {
+            id: crypto.randomUUID(),
+            title: title.trim(),
+            subtitle: description.trim(),
+            completed: false,
+            timestamp: new Date().toISOString().slice(0, 10),
+          };
+        }),
+      ]);
+    } catch (error) {
+      console.error("Error fetching suggested items:", error);
+      // TODO: UI feedback for error
+    } finally {
+      setIsItemsLoading(false);
+    }
+  };
+
+  async function updateMapCenter() {
+    try {
+      const coordinates = await getCoordinates(location);
+      setMapCenter(coordinates);
+    } catch (error) {
+      console.error("Error getting coordinates:", error);
+    }
+  }
+
+  // Load suggested items on component mount, i.e., page load
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      getSuggestedItems();
+      updateMapCenter();
+    }
+  }, [location]);
 
   function handleAddItem(item) {
     const newItem = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       title: item,
       subtitle: "Added!",
       completed: false,
@@ -159,20 +190,30 @@ export default function App() {
           </div>
 
           <div className="items-list">
-            {items.map((item) => (
-              <ListItem
-                key={item.id}
-                item={item}
-                checkAction={handleCheckItem}
-                deleteAction={handleDeleteItem}
-              />
-            ))}
+            {isItemsLoading ? (
+              // Skeleton loading animation
+              <div className="skeleton-content items-skeleton-content">
+                <div className="skeleton-line-short pulse item-select-skeleton"></div>
+                <div className="skeleton-line-full pulse item-skeleton"></div>
+                <div className="skeleton-line-full pulse item-skeleton"></div>
+                <div className="skeleton-line-full pulse item-skeleton"></div>
+              </div>
+            ) : (
+              items.map((item) => (
+                <ListItem
+                  key={item.id}
+                  item={item}
+                  checkAction={handleCheckItem}
+                  deleteAction={handleDeleteItem}
+                />
+              ))
+            )}
           </div>
         </div>
 
         <div className="map-section">
           <Map center={mapCenter} zoom={mapZoom} />
-          <LocationInfo />
+          <LocationInfo location={location} />
         </div>
       </div>
     </>
