@@ -9,6 +9,7 @@ import Map from "./components/Map";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { callOpenAI } from "./services/openAiService";
 import { getCoordinates } from "./services/mapboxService";
+import { capitalize } from "./utils";
 
 export default function App() {
   const mounted = useRef(false);
@@ -148,13 +149,15 @@ export default function App() {
   }
 
   function handleLocationClick() {
-    setLocation(locationInput);
+    const formattedLocation = capitalize(locationInput);
+    setLocation(formattedLocation);
     setLocationInput("");
   }
 
   function handleLocationSubmit(event) {
     if (event.key === "Enter") {
-      setLocation(locationInput);
+      const formattedLocation = capitalize(locationInput);
+      setLocation(formattedLocation);
       setLocationInput("");
     }
   }
