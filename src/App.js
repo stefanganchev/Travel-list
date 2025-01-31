@@ -14,9 +14,12 @@ export default function App() {
   const mounted = useRef(false);
 
   // location and map data
-  const location = "Dallas";
+  const [location, setLocation] = useState("");
+  const [locationInput, setLocationInput] = useState("");
+
   const [mapCenter, setMapCenter] = useState([-122.4194, 37.7749]); // San Francisco coordinates
   const mapZoom = 12;
+
   const [items, setItem] = useState([]);
 
   // sorting options
@@ -74,7 +77,7 @@ export default function App() {
 
   // Load suggested items on component mount, i.e., page load
   useEffect(() => {
-    if (!mounted.current) {
+    if (!mounted.current && location) {
       mounted.current = true;
       getSuggestedItems();
       updateMapCenter();
@@ -139,83 +142,124 @@ export default function App() {
         break;
     }
   };
+
+  function handleLocationChange(event) {
+    setLocationInput(event.target.value);
+  }
+
+  function handleLocationClick() {
+    setLocation(locationInput);
+    setLocationInput("");
+  }
+
+  function handleLocationSubmit(event) {
+    if (event.key === "Enter") {
+      setLocation(locationInput);
+      setLocationInput("");
+    }
+  }
+
   return (
     <>
       <Navbar />
-      <div className="container">
-        <div className="planner-section">
-          <h1 className="title">
-            Let's get you ready for
-            <br />
-            your trip to <span className="destination">{location}!</span>
-          </h1>
+      {location ? (
+        // List of items page
+        <div className="container">
+          <div className="planner-section">
+            <h1 className="title">
+              Let's get you ready for
+              <br />
+              your trip to <span className="destination">{location}!</span>
+            </h1>
 
-          <AddItem
-            action={handleAddItem}
-            placeholder="Add an item for your trip..."
-          />
+            <AddItem
+              action={handleAddItem}
+              placeholder="Add an item for your trip..."
+            />
 
-          <div className="list-controls">
-            {items.length > 0 && (
-              <>
-                <Select
-                  options={sortingOptions}
-                  onChange={handleSelectChange}
-                  className="sort-control"
-                  placeholder="Sort by..."
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      border: "none",
-                      boxShadow: "none",
-                      borderRadius: "6px",
-                      paddingLeft: "4px",
-                      paddingRight: "4px",
-                      height: "40px",
-                      fontSize: "14px",
-                      color: "#1e1e1e",
-                      cursor: "pointer",
-                      "&:hover": {
-                        backgroundColor: "#f5f5f5",
-                      },
-                    }),
-                    indicatorSeparator: () => ({
-                      display: "none",
-                    }),
-                  }}
-                />
-                <ClearButton handleClear={handleClearList} />
-              </>
-            )}
+            <div className="list-controls">
+              {items.length > 0 && (
+                <>
+                  <Select
+                    options={sortingOptions}
+                    onChange={handleSelectChange}
+                    className="sort-control"
+                    placeholder="Sort by..."
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        border: "none",
+                        boxShadow: "none",
+                        borderRadius: "6px",
+                        paddingLeft: "4px",
+                        paddingRight: "4px",
+                        height: "40px",
+                        fontSize: "14px",
+                        color: "#1e1e1e",
+                        cursor: "pointer",
+                        "&:hover": {
+                          backgroundColor: "#f5f5f5",
+                        },
+                      }),
+                      indicatorSeparator: () => ({
+                        display: "none",
+                      }),
+                    }}
+                  />
+                  <ClearButton handleClear={handleClearList} />
+                </>
+              )}
+            </div>
+
+            <div className="items-list">
+              {isItemsLoading ? (
+                // Skeleton loading animation
+                <div className="skeleton-content items-skeleton-content">
+                  <div className="skeleton-line-short pulse item-select-skeleton"></div>
+                  <div className="skeleton-line-full pulse item-skeleton"></div>
+                  <div className="skeleton-line-full pulse item-skeleton"></div>
+                  <div className="skeleton-line-full pulse item-skeleton"></div>
+                </div>
+              ) : (
+                items.map((item) => (
+                  <ListItem
+                    key={item.id}
+                    item={item}
+                    checkAction={handleCheckItem}
+                    deleteAction={handleDeleteItem}
+                  />
+                ))
+              )}
+            </div>
           </div>
-
-          <div className="items-list">
-            {isItemsLoading ? (
-              // Skeleton loading animation
-              <div className="skeleton-content items-skeleton-content">
-                <div className="skeleton-line-short pulse item-select-skeleton"></div>
-                <div className="skeleton-line-full pulse item-skeleton"></div>
-                <div className="skeleton-line-full pulse item-skeleton"></div>
-                <div className="skeleton-line-full pulse item-skeleton"></div>
-              </div>
-            ) : (
-              items.map((item) => (
-                <ListItem
-                  key={item.id}
-                  item={item}
-                  checkAction={handleCheckItem}
-                  deleteAction={handleDeleteItem}
-                />
-              ))
-            )}
+          <div className="map-section">
+            <Map center={mapCenter} zoom={mapZoom} />
+            <LocationInfo location={location} />
           </div>
         </div>
+      ) : (
+        // Landing page
+        <main className="landing-page">
+          <h1 className="title">Where are you going?</h1>
+          <p className="subtitle">
+            Let us help you select some important items for your trip.
+          </p>
 
-        <div className="map-section">
-          <Map center={mapCenter} zoom={mapZoom} />
-          <LocationInfo location={location} />
-        </div>
-      </div>
+          <div className="search-container">
+            <input
+              type="text"
+              className="add-item-input"
+              placeholder="Search for your destination..."
+              onChange={handleLocationChange}
+              onKeyDown={handleLocationSubmit}
+              value={locationInput}
+            />
+            <button className="add-button" onClick={handleLocationClick}>
+              <span>Let's go</span>
+            </button>
+          </div>
+        </main>
+      )}
     </>
   );
 }

@@ -339,6 +339,7 @@ body {
 }
 
 /* Location info styles */
+
 .location-info {
 }
 
@@ -360,6 +361,7 @@ body {
 }
 
 /* Skeleton styles */
+
 .skeleton-content {
   display: flex;
   flex-direction: column;
@@ -407,7 +409,8 @@ body {
   height: 16px;
 }
 
-/* Animation */
+/* Skeleton animation */
+
 @keyframes pulse {
   0% {
     opacity: 1;
@@ -424,17 +427,26 @@ body {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-  .skeleton-line-short {
-    height: 10px;
-  }
+/* Landing page / location selection */
 
-  .skeleton-line-full {
-    height: 10px;
-  }
+.landing-page {
+  max-width: 832px;
+  margin: 0 auto;
+  padding: 160px 20px;
+  text-align: center;
+}
 
-  .skeleton-line-medium {
-    height: 10px;
-  }
+.landing-page .title {
+  margin: 0 0 1rem;
+}
+
+.landing-page .subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary-color);
+  margin: 0 0 40px;
+}
+
+.search-container {
+  display: flex;
+  gap: 1rem;
 }
