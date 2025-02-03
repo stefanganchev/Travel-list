@@ -6,6 +6,7 @@ import ListItem from "./components/ListItem";
 import ClearButton from "./components/ClearButton";
 import LocationInfo from "./components/LocationInfo";
 import Map from "./components/Map";
+import Confetti from "./components/Confetti";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { callOpenAI } from "./services/openAiService";
 import { getCoordinates } from "./services/mapboxService";
@@ -22,6 +23,10 @@ export default function App() {
   const mapZoom = 12;
 
   const [items, setItem] = useState([]);
+  const [itemDescription, setItemDescription] = useState("...");
+
+  const allItemsCompleted =
+    items.length > 0 && items.every((item) => item.completed);
 
   // sorting options
   const sortingOptions = [
@@ -67,6 +72,21 @@ export default function App() {
     }
   };
 
+  // Get the suggested items from OpenAI
+  const getItemDescription = async (item) => {
+    try {
+      const response = await callOpenAI(
+        `Provide a short (8-10 words) description for ${item} as a travel item for ${location}.`
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching item description:", error);
+      // TODO: UI feedback for error
+    } finally {
+      setIsItemsLoading(false);
+    }
+  };
+
   async function updateMapCenter() {
     try {
       const coordinates = await getCoordinates(location);
@@ -85,23 +105,45 @@ export default function App() {
     }
   }, [location]);
 
+  // This version waits for the api call to complete before updating the state and mounting the component
+  // async function handleAddItem(item) {
+  //   const description = await getItemDescription(item);
+  //   const newItem = {
+  //     id: crypto.randomUUID(),
+  //     title: item,
+  //     subtitle: description,
+  //     completed: false,
+  //     timestamp: new Date().toISOString().slice(0, 10),
+  //   };
+  //   setItem([newItem, ...items]);
+  // }
+
   function handleAddItem(item) {
     const newItem = {
       id: crypto.randomUUID(),
       title: item,
-      subtitle: "Added!",
+      subtitle: "...",
       completed: false,
       timestamp: new Date().toISOString().slice(0, 10),
     };
     setItem([newItem, ...items]);
-    console.log(items);
+    getItemDescription(item).then((description) => {
+      console.log(newItem);
+      setItem([
+        {
+          ...newItem,
+          subtitle: description,
+        },
+        ...items.filter((i) => i !== newItem.id),
+      ]);
+    });
   }
 
   function handleCheckItem(item) {
     // create an item with the opposite completed status
     const targetItem = items.find((i) => i.id === item.id);
     targetItem.completed = !targetItem.completed;
-    targetItem.subtitle = "Completed!";
+    // targetItem.subtitle = "Completed!";
 
     // update the items in the list
     setItem([...items.filter((i) => i !== item.id)]);
@@ -169,19 +211,32 @@ export default function App() {
         // List of items page
         <div className="container">
           <div className="planner-section">
-            <h1 className="title">
-              Let's get you ready for
-              <br />
-              your trip to <span className="destination">{location}!</span>
-            </h1>
-
-            <AddItem
-              action={handleAddItem}
-              placeholder="Add an item for your trip..."
-            />
+            {allItemsCompleted ? (
+              <>
+                <Confetti />
+                <h1 className="title">
+                  Nice job!
+                  <br />
+                  <span className="destination">{location}</span> is awaiting
+                  you!
+                </h1>
+              </>
+            ) : (
+              <>
+                <h1 className="title">
+                  Let's get you ready for
+                  <br />
+                  your trip to <span className="destination">{location}!</span>
+                </h1>
+                <AddItem
+                  action={handleAddItem}
+                  placeholder="Add an item for your trip..."
+                />
+              </>
+            )}
 
             <div className="list-controls">
-              {items.length > 0 && (
+              {items.length > 0 && !allItemsCompleted && (
                 <>
                   <Select
                     options={sortingOptions}
