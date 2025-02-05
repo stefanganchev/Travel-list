@@ -23,7 +23,6 @@ export default function App() {
   const mapZoom = 12;
 
   const [items, setItem] = useState([]);
-  const [itemDescription, setItemDescription] = useState("...");
 
   const allItemsCompleted =
     items.length > 0 && items.every((item) => item.completed);
