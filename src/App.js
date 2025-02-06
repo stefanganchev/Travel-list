@@ -211,7 +211,7 @@ export default function App() {
       {location ? (
         // List of items page
         <div className="container">
-          <div className="planner-section">
+          <main className="planner-section">
             {allItemsCompleted ? (
               <>
                 <Confetti />
@@ -293,11 +293,11 @@ export default function App() {
                 ))
               )}
             </div>
-          </div>
-          <div className="map-section">
+          </main>
+          <aside className="map-section">
             <Map center={mapCenter} zoom={mapZoom} />
             <LocationInfo location={location} />
-          </div>
+          </aside>
         </div>
       ) : (
         // Landing page
