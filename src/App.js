@@ -7,6 +7,8 @@ import ClearButton from "./components/ClearButton";
 import LocationInfo from "./components/LocationInfo";
 import Map from "./components/Map";
 import Confetti from "./components/Confetti";
+import AIGenDisplay from "./components/AIGenDisplay";
+import AIGenDisplayInline from "./components/AIGenDisplayInline";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { callOpenAI } from "./services/openAiService";
 import { getCoordinates } from "./services/mapboxService";
@@ -121,7 +123,7 @@ export default function App() {
     const newItem = {
       id: crypto.randomUUID(),
       title: item,
-      subtitle: "...",
+      subtitle: <AIGenDisplayInline />,
       completed: false,
       timestamp: new Date().toISOString().slice(0, 10),
     };
@@ -270,13 +272,16 @@ export default function App() {
 
             <div className="items-list">
               {isItemsLoading ? (
-                // Skeleton loading animation
-                <div className="skeleton-content items-skeleton-content">
-                  <div className="skeleton-line-short pulse item-select-skeleton"></div>
-                  <div className="skeleton-line-full pulse item-skeleton"></div>
-                  <div className="skeleton-line-full pulse item-skeleton"></div>
-                  <div className="skeleton-line-full pulse item-skeleton"></div>
-                </div>
+                <>
+                  <AIGenDisplay styles={{ top: "64px" }} />
+                  {/* Skeleton loading animation */}
+                  <div className="skeleton-content items-skeleton-content">
+                    <div className="skeleton-line-short pulse item-select-skeleton"></div>
+                    <div className="skeleton-line-full pulse item-skeleton"></div>
+                    <div className="skeleton-line-full pulse item-skeleton"></div>
+                    <div className="skeleton-line-full pulse item-skeleton"></div>
+                  </div>
+                </>
               ) : (
                 items.map((item) => (
                   <ListItem

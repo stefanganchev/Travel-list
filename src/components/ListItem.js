@@ -11,7 +11,7 @@ export default function ListItem({ item, checkAction, deleteAction }) {
         />
         <h3>{item.title}</h3>
       </div>
-      <p className="item-description">{item.subtitle}</p>
+      <div className="item-description">{item.subtitle}</div>
       {!item.completed && (
         <button className="delete-item" onClick={() => deleteAction(item)}>
           <img src="images/X.svg" alt="Delete" />

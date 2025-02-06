@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { callOpenAI } from "../services/openAiService";
+import AIGenDisplay from "../components/AIGenDisplay";
 
 export default function LocationInfo({ location }) {
   const [locationSubtitle, setLocationSubtitle] = useState(null);
@@ -55,14 +56,18 @@ export default function LocationInfo({ location }) {
       <h2>{location}</h2>
       <h3>
         {isSubtitleLoading ? (
-          // Skeleton loading animation
-          <div className="skeleton-line-full pulse location-info-subtitle"></div>
+          <>
+            <AIGenDisplay styles={{ top: "32px" }} />
+            {/* Skeleton loading animation */}
+            <div className="skeleton-line-full pulse location-info-subtitle"></div>
+          </>
         ) : (
           <span>{locationSubtitle}</span>
         )}
       </h3>
       {isDescriptionLoading ? (
         <div className="skeleton-content info-skeleton-content">
+          <AIGenDisplay styles={{ top: "0px" }} />
           <div className="skeleton-line-full pulse location-info-description"></div>
           <div className="skeleton-line-full pulse location-info-description"></div>
           <div className="skeleton-line-full pulse location-info-description"></div>

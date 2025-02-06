@@ -1748,6 +1748,18 @@
     schema-utils "^4.2.0"
     source-map "^0.7.3"
 
+"@rive-app/canvas@2.25.7":
+  version "2.25.7"
+  resolved "https://registry.yarnpkg.com/@rive-app/canvas/-/canvas-2.25.7.tgz#2c38616e675d98e2217b5a2d5ef052f15d9f0b3a"
+  integrity sha512-cxC9MrjaYw6VBtZFyXHvwXukERSsdrQP9/48rQkaBysS3+WQbv5XQRzgxFsaj4sYWUgoZu57vHa27o6ktSrY7g==
+
+"@rive-app/react-canvas@^4.17.10":
+  version "4.17.10"
+  resolved "https://registry.yarnpkg.com/@rive-app/react-canvas/-/react-canvas-4.17.10.tgz#8f02b9a74c91dc1107fdb73504063aff45f80a3a"
+  integrity sha512-fYRG1KSqR8V0lc7quwGWwocrw+1kYinTq88R+SwDJYG3zeT22mJ58kPVAZsm2Gt3JLrJsuSWc5RtOq9fyBnfmw==
+  dependencies:
+    "@rive-app/canvas" "2.25.7"
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
