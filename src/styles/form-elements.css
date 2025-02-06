@@ -1,0 +1,11 @@
+.sort-control {
+  position: relative;
+  width: 240px;
+  height: 40px;
+  background: white;
+  border-radius: var(--corner-radius);
+  border: 0;
+  font-size: 14px;
+  color: #1e1e1e;
+  caret-color: transparent;
+}

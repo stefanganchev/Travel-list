@@ -1,0 +1,52 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  width: 24px;
+  height: 24px;
+}
+
+.brand {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-secondary-color);
+}
+
+.nav-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--corner-radius);
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: var(--button-text-weight);
+  transition: all 0.2s ease;
+}
+
+.nav-button-link {
+  padding: 0.5rem 1rem;
+  border-radius: var(--corner-radius);
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: var(--button-text-weight);
+  transition: all 0.2s ease;
+}

@@ -1,0 +1,11 @@
+.clear-button {
+  color: var(--secondary-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: var(--button-text-weight);
+  display: flex;
+  align-items: center;
+  gap: 4px; /* This adds consistent spacing between text and icon */
+}

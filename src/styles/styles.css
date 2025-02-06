@@ -1,0 +1,56 @@
+/* Colors, corner radii, etc */
+@import url("variables.css");
+/* Inter fonnt */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* Component related styles */
+
+/* The bar at the top of the page */
+@import url("navbar.css");
+/* Input field for adding new items */
+@import url("add-item-form.css");
+/* All icons */
+@import url("icons.css");
+/* All buttons */
+@import url("buttons.css");
+/* Form elements such as dropdowns, checkboxes, etc */
+@import url("form-elements.css");
+/* Items list */
+@import url("list.css");
+/* Map styles */
+@import url("map.css");
+/* Location info side bar*/
+@import url("location-info.css");
+/* Loading spinners and skeletons */
+@import url("loaders.css");
+/* Landing page styles */
+@import url("landing-page.css");
+/* Confetti animation */
+@import url("confetti.css");
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  color: var(--text-color);
+  background: var(--body-backkground);
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 6fr 4fr;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 3rem;
+  line-height: 120%;
+  margin-bottom: 2rem;
+}
+
+.destination {
+  color: var(--primary-color);
+}

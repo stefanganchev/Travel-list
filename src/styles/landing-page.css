@@ -1,0 +1,21 @@
+.landing-page {
+  max-width: 832px;
+  margin: 0 auto;
+  padding: 160px 20px;
+  text-align: center;
+}
+
+.landing-page .title {
+  margin: 0 0 1rem;
+}
+
+.landing-page .subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary-color);
+  margin: 0 0 40px;
+}
+
+.search-container {
+  display: flex;
+  gap: 1rem;
+}
